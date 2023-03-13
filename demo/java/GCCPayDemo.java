@@ -17,8 +17,7 @@ import sun.misc.BASE64Encoder;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.UUID;
+import java.util.*;
 
 public class GCCPayDemo {
 
@@ -136,11 +135,19 @@ public class GCCPayDemo {
     }
 
     private String generateSignStr(String uri,String method,String timestamp) throws Exception {
-        JSONObject params = new JSONObject();
+
+        Map<String, String> params = new TreeMap<String, String>(
+                new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        return o1.compareTo(o2);
+                    }
+                }
+        );
         params.put("key",KEY);
         params.put("method",method);
         params.put("signMethod","HmacSHA256");
-        params.put("signVersion",1);
+        params.put("signVersion",String.valueOf(1));
         params.put("timestamp",timestamp);
         params.put("uri",uri);
 
